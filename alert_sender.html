@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>🔴 Emergency Help Button</title>
+    <link rel="stylesheet" href="styles.css">
+  <script>
+    function toggleCustomReason() {
+      const selected = document.getElementById("reason").value;
+      const customInput = document.getElementById("customReasonDiv");
+      customInput.style.display = selected === "Others (type below)" ? "block" : "none";
+    }
+
+    function submitAlert() {
+      const room = document.getElementById("room").value.trim();
+      const teacher = document.getElementById("teacher").value.trim();
+      const selectedReason = document.getElementById("reason").value;
+      const customReason = document.getElementById("customReason").value.trim();
+
+      if (!room || !teacher) {
+        alert("Please enter both room and teacher name.");
+        return;
+      }
+
+      const reason = selectedReason === "Others (type below)" ? customReason : selectedReason;
+      if (selectedReason === "Others (type below)" && !customReason) {
+        alert("Please enter a custom reason.");
+        return;
+      }
+
+      const newAlert = {
+        room: room,
+        teacher: teacher,
+        reason: reason,
+        time: new Date().toISOString().replace("T", " ").slice(0, 19)
+      };
+
+      fetch("http://localhost:3000/alerts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newAlert)
+      })
+        .then(response => {
+          if (response.ok) {
+            document.getElementById("status").innerText =
+              `🚨 Alert sent from ${room} by ${teacher} for: ${reason}`;
+            // Optionally clear form here
+          } else {
+            throw new Error("Failed to send alert");
+          }
+        })
+        .catch(() => {
+          alert("❌ Could not send alert. Make sure your backend is running.");
+        });
+
+    }
+    function clearForm() {
+      document.getElementById("room").value = "";
+      document.getElementById("teacher").value = "";
+      document.getElementById("reason").selectedIndex = 0; // Reset to first option
+      document.getElementById("customReason").value = "";
+      document.getElementById("customReasonDiv").style.display = "none";
+      document.getElementById("status").innerText = "";
+  }
+  </script>
+</head>
+<body>
+  <h1>🔴 Emergency Help Button</h1>
+
+  <label>Enter Room Number or Name:</label><br>
+  <input type="text" id="room"><br><br>
+
+  <label>Enter Your Name (Teacher):</label><br>
+  <input type="text" id="teacher"><br><br>
+
+  <label>Reason for Emergency:</label><br>
+  <select id="reason" onchange="toggleCustomReason()">
+    <option>Student unwell</option>
+    <option>Misbehavior in class</option>
+    <option>Exam cheating suspicion</option>
+    <option>Need assistance</option>
+    <option>Others (type below)</option>
+  </select><br><br>
+
+  <div id="customReasonDiv" style="display:none;">
+    <label>Enter Custom Reason:</label><br>
+    <input type="text" id="customReason"><br><br>
+  </div>
+
+  <button onclick="submitAlert()">Call for Help</button>
+  <button onclick="clearForm()">Clear</button>
+
+
+  <h2 id="status"></h2>
+</body>
+</html>
