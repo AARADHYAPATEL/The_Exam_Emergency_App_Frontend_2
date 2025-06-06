@@ -16,6 +16,29 @@
       const teacher = document.getElementById("teacher").value.trim();
       const selectedReason = document.getElementById("reason").value;
       const customReason = document.getElementById("customReason").value.trim();
+      const position = document.getElementById("position").value;
+
+      // You can assign urgency colors or levels here if needed
+      let urgencyColor;
+      switch (position) {
+        case "Subject Teacher":
+          urgencyColor = "grey";
+          break;
+        case "Class Teacher":
+          urgencyColor = "yellow";
+          break;
+        case "Coordinator":
+          urgencyColor = "orange";
+          break;
+        case "Vice Principal":
+          urgencyColor = "red";
+          break;
+        case "Principal":
+          urgencyColor = "maroon";
+          break;
+        default:
+          urgencyColor = "white";
+      }
 
       if (!room || !teacher) {
         alert("Please enter both room and teacher name.");
@@ -32,6 +55,8 @@
         room: room,
         teacher: teacher,
         reason: reason,
+        position: position,
+        urgencyColor: urgencyColor,
         time: new Date().toISOString().replace("T", " ").slice(0, 19)
       };
 
@@ -74,6 +99,15 @@
 
   <label>Enter Your Name (Teacher):</label><br>
   <input type="text" id="teacher"><br><br>
+
+  <label>Select Your Position:</label><br>
+  <select id="position">
+    <option value="Subject Teacher">Subject Teacher</option>
+    <option value="Class Teacher">Class Teacher</option>
+    <option value="Coordinator">Coordinator</option>
+    <option value="Vice Principal">Vice Principal</option>
+    <option value="Principal">Principal</option>
+  </select><br><br>
 
   <label>Reason for Emergency:</label><br>
   <select id="reason" onchange="toggleCustomReason()">
