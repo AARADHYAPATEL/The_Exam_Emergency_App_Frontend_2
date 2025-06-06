@@ -35,7 +35,7 @@
         time: new Date().toISOString().replace("T", " ").slice(0, 19)
       };
 
-      fetch("https://the-exam-emergency-app-backend.onrender.com", {
+      fetch("https://the-exam-emergency-app-backend.onrender.com/alerts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
