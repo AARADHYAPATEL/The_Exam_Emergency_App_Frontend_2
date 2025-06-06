@@ -20,24 +20,31 @@
 
       // You can assign urgency colors or levels here if needed
       let urgencyColor;
+      let buzzerSound;
       switch (position) {
         case "Subject Teacher":
           urgencyColor = "grey";
+          buzzerSound = "Subject_Teacher.mp3"
           break;
         case "Class Teacher":
           urgencyColor = "yellow";
+          buzzerSound = "Class_Teacher.mp3"
           break;
         case "Coordinator":
           urgencyColor = "orange";
+          buzzerSound = "coordinator.mp3"
           break;
         case "Vice Principal":
           urgencyColor = "red";
+          buzzerSound = "Vice_Principal.mp3"
           break;
         case "Principal":
           urgencyColor = "maroon";
+          buzzerSound = "Principal.mp3"
           break;
         default:
           urgencyColor = "white";
+          buzzerSound = "default_buzzer.mp3"
       }
 
       if (!room || !teacher) {
@@ -57,6 +64,7 @@
         reason: reason,
         position: position,
         urgencyColor: urgencyColor,
+        buzzerSound: buzzerSound,
         time: new Date().toISOString().replace("T", " ").slice(0, 19)
       };
 
